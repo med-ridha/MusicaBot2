@@ -128,16 +128,19 @@ export class MusicClass {
                     this.playSong(message, servers);
                     this.player.removeListener('stateChange', callback);
                 } else {
-                    message.reply('ma3adach fama songs fil queue, Hani 5arej').catch(error => { console.error(`ya ltif ${error}`) });
-                    this.player.removeListener('stateChange', callback);
-                    try {
-                        this.player.stop();
-                        this.connection!.destroy()
-                        servers[message.guild!.id] = null;
+                    console.log("hahahahahahahahahahahahahahahaha");
+                    setTimeout(() => {
+                        message.reply('93adt 1min blech songs, hani 5arej').catch(error => { console.error(`ya ltif ${error}`) });
+                        this.player.removeListener('stateChange', callback);
+                        try {
+                            this.player.stop();
+                            this.connection!.destroy()
+                            servers[message.guild!.id] = null;
 
-                    } catch (error) {
-                        console.error(error);
-                    }
+                        } catch (error) {
+                            console.error(error);
+                        }
+                    }, 1000)
                 }
             }
         }

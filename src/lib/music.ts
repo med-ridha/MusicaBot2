@@ -1,8 +1,7 @@
 import { Message } from "discord.js";
 
-import { Playlist, YouTube } from 'popyt';
+import { YouTube } from 'popyt';
 import { MusicClass } from './MusicClass'
-import { VoiceConnectionStatus } from "@discordjs/voice";
 const search = new YouTube(process.env.YoutubeAPIKEY);
 let servers: Record<string, MusicClass | null> = {};
 
@@ -11,7 +10,10 @@ export async function play(message: Message, songname: string): Promise<Number> 
     let client = servers[message.guild!.id];
 
     if (songname.includes("https://www.youtube.com/") && songname.includes("list")) {
-        let playlist = await search.getPlaylist(songname).catch(error => console.error(error))
+        const parsedUrl = new URL(songname);
+        const queryParams = Object.fromEntries(parsedUrl.searchParams.entries());
+        const list = queryParams.list
+        let playlist = await search.getPlaylist(list).catch(error => console.error(error))
         if (!playlist) {
             message.reply("Ma9itech el playlist eli t7eb 3liha")
             return 1;
