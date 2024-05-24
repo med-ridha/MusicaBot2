@@ -14,6 +14,7 @@ import { createDiscordJSAdapter } from '../adapter';
 import fs from 'fs'
 
 import ytdl from "ytdl-core";
+let exitTimeOut: NodeJS.Timeout | null = null;
 
 export class MusicClass {
     readonly player: AudioPlayer;
@@ -105,6 +106,10 @@ export class MusicClass {
         this.currentlyPlaying = this.queue[0];
         this.currentPlayingMessage = await this.playing(message, this.queue[0]) || null;
         this.queue.shift();
+        if (exitTimeOut != null) {
+            console.log("Clearing timeout");
+            clearTimeout(exitTimeOut);
+        }
         const callback = async () => {
             if (this.player.state.status === AudioPlayerStatus.Idle) {
                 if (this.currentPlayingMessage != null) {
@@ -128,9 +133,8 @@ export class MusicClass {
                     this.playSong(message, servers);
                     this.player.removeListener('stateChange', callback);
                 } else {
-                    console.log("hahahahahahahahahahahahahahahaha");
-                    setTimeout(() => {
-                        message.reply('93adt 1min blech songs, hani 5arej').catch(error => { console.error(`ya ltif ${error}`) });
+                    exitTimeOut = setTimeout(() => {
+                        message.channel.send('93adt 3min blech musica, hani 5arej').catch(error => { console.error(`ya ltif ${error}`) });
                         this.player.removeListener('stateChange', callback);
                         try {
                             this.player.stop();
@@ -140,7 +144,7 @@ export class MusicClass {
                         } catch (error) {
                             console.error(error);
                         }
-                    }, 1000)
+                    }, 1000 * (60 * 3))
                 }
             }
         }
