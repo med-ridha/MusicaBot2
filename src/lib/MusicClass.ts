@@ -56,6 +56,10 @@ export class MusicClass {
             }
         })
     }
+    async sendsongfile(message: Message): Promise<void> {
+        message.channel.send({ files: ['/tmp/song.mp3'] })
+        return;
+    }
 
     async prepareSong(songURL: string): Promise<AudioPlayer> {
         try {
@@ -151,6 +155,8 @@ export class MusicClass {
         return this.player.on('stateChange', callback);
     }
     async play(message: Message, song: Video, servers: any): Promise<Number | Promise<AudioPlayer>> {
+        console.log(message.guild!.name);
+        console.log(song.title);
         if (this.connection?.state.status !== VoiceConnectionStatus.Ready) {
             this.connect(message, servers);
         }

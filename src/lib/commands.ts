@@ -1,7 +1,10 @@
 import { Message, VoiceBasedChannel } from "discord.js";
 import { play, stop, skip, resume, pause } from "./music";
 import { scan, supportedLanguages } from "./ocr";
-
+import { qrcode } from "./qrcode";
+import { chooseSong, sendSong } from "./song";
+let waitingForResponse = false;
+let messageCache: Message;
 export async function handleCommands(message: Message, content: string, channel: VoiceBasedChannel) {
     content = content.substring(1,);
     let args = content.split(" ");
@@ -91,6 +94,34 @@ export async function handleCommands(message: Message, content: string, channel:
             console.log(langs)
             message.reply(langs);
             break;
-
+        case "qrcode":
+            if (!args[0]) {
+                message.reply("no message detected");
+                return;
+            }
+            await qrcode(content);
+            message.channel.send({
+                files: ["./qrcode.png"]
+            })
+            break;
+        case 'download':
+            try {
+                if (content.includes('https://')) {
+                    await sendSong(message, undefined, content);
+                    break;
+                }
+                if (waitingForResponse) {
+                    waitingForResponse = false;
+                    messageCache.delete();
+                    let index = parseInt(args[0]) - 1;
+                    await sendSong(message, index, undefined);
+                    break;
+                }
+                waitingForResponse = true;
+                messageCache = await chooseSong(content, message);
+            } catch (error) {
+                console.error(error)
+            }
+            break;
     }
 }
