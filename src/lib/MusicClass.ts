@@ -83,15 +83,15 @@ export class MusicClass {
         return state!;
     }
     async Queued(message: Message, song: Video): Promise<void | Message<boolean>> {
-        return message.reply(`Queued: ${song.url}`)
+        return message.channel.send(`Queued: ${song.title}`)
             .catch((error) => { console.error(`ya ltif ${error}`) });
     }
     async playing(message: Message, song: Video): Promise<void | Message<boolean>> {
-        return message.reply(`Playing: ${song.url}`)
+        return message.channel.send(`Playing: ${song.title}`)
             .catch(error => { console.error(`ya ltif ${error}`) });
     }
     printQueue() {
-        this.queue.map(song => console.log(`URL: ${song.url}, TITLE: ${song.title}`));
+        this.queue.map(song => console.log(`URL: ${song.title}, TITLE: ${song.title}`));
     }
     async playSong(message: Message, servers: any): Promise<AudioPlayer> {
         if (this.currentPlayingMessage != null) {
@@ -133,23 +133,35 @@ export class MusicClass {
                     this.playSong(message, servers);
                     this.player.removeListener('stateChange', callback);
                 } else {
-                    exitTimeOut = setTimeout(() => {
-                        message.channel.send('93adt 3min blech musica, hani 5arej').catch(error => { console.error(`ya ltif ${error}`) });
-                        this.player.removeListener('stateChange', callback);
-                        try {
-                            this.player.stop();
-                            this.connection!.destroy()
-                            servers[message.guild!.id] = null;
+                    this.player.removeListener('stateChange', callback);
+                    try {
+                        this.player.stop();
+                        this.connection!.destroy()
+                        servers[message.guild!.id] = null;
 
-                        } catch (error) {
-                            console.error(error);
-                        }
-                    }, 1000 * (60 * 3))
+                    } catch (error) {
+                        console.error(error);
+                    }
                 }
             }
         }
         return this.player.on('stateChange', callback);
     }
+
+    async playQueue(message: Message, servers: any, queue: Video[]) {
+        this.queue.push(...queue);
+        if (this.connection?.state.status !== VoiceConnectionStatus.Ready) {
+            this.connect(message, servers);
+        }
+        if (this.player.state.status === AudioPlayerStatus.Playing) {
+            message.reply(`Queued Playlist`);
+            return 0;
+        }
+        else {
+            return this.playSong(message, servers);
+        }
+    }
+
     async play(message: Message, song: Video, servers: any): Promise<Number | Promise<AudioPlayer>> {
         console.log(message.guild!.name);
         console.log(song.title);
