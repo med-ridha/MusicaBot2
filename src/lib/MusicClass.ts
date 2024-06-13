@@ -56,10 +56,6 @@ export class MusicClass {
             }
         })
     }
-    async sendsongfile(message: Message): Promise<void> {
-        message.channel.send({ files: ['/tmp/song.mp3'] })
-        return;
-    }
 
     async prepareSong(songURL: string): Promise<AudioPlayer> {
         try {
