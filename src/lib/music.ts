@@ -2,7 +2,7 @@ import { Message } from "discord.js";
 
 import { YouTube } from 'popyt';
 import { MusicClass } from './MusicClass'
-import { getPlaylistInfo, getTrackInfo } from "./spotify";
+import { getTrackInfo } from "./spotify";
 const search = new YouTube(process.env.YoutubeAPIKEY);
 let servers: Record<string, MusicClass | null> = {};
 
@@ -21,19 +21,6 @@ export async function play(message: Message, songname: string, token: string): P
         }
         await playlist.fetchVideos({ maxPerPage: 50 })
         client!.playList(message, playlist.videos, servers);
-    } else if (songname.includes("https://open.spotify.com/playlist/")) {
-        let playlistId = songname.split('/')[4].split('?')[0];
-        let playlist = await getPlaylistInfo(playlistId, token);
-        let queue = [];
-        for (let i = 0; i < playlist.length; i++) {
-            let song = await search.getVideo(playlist[i]).catch(error => console.error(error));
-            if (!song) {
-                message.reply("Ma9itech el song eli t7eb 3liha")
-                return 1;
-            }
-            queue.push(song);
-        }
-        client!.playQueue(message, servers, queue);
     } else {
         if (songname.includes("https://open.spotify.com/track/")) {
             let trackId = songname.split('/')[4].split('?')[0];

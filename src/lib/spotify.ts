@@ -48,27 +48,3 @@ export async function getTrackInfo(trackID: string, accessToken: string): Promis
     return data.name + ' by ' + data.artists[0].name;
 }
 
-export async function getPlaylistInfo(playlistID: string, accessToken: string): Promise<string[]> {
-    const url = `https://api.spotify.com/v1/playlists/${playlistID}`;
-    const headers = {
-        'Authorization': `Bearer ${accessToken}`
-    };
-
-    const response = await fetch(url, {
-        method: 'GET',
-        headers: headers
-
-    });
-
-    if (!response.ok) {
-        console.log(response);
-        return ['Failed to get playlist info']
-    }
-
-    const data: any = await response.json();
-    let songs: string[] = [];
-    data.tracks.items.forEach((item: any) => {
-        songs.push(item.track.name + ' by ' + item.track.artists[0].name);
-    });
-    return songs;
-}
