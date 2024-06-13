@@ -93,7 +93,7 @@ export class MusicClass {
     printQueue() {
         this.queue.map(song => console.log(`URL: ${song.url}, TITLE: ${song.title}`));
     }
-    async playSong(message: Message, servers: any): Promise<AudioPlayer | boolean> {
+    async playSong(message: Message, servers: any): Promise<AudioPlayer> {
         if (this.currentPlayingMessage != null) {
             try {
                 await this.currentPlayingMessage.delete();
@@ -102,60 +102,53 @@ export class MusicClass {
             }
 
         };
-        if (this.queue.length === 0) {
-            message.channel.send('clearing queue');
-            servers[message.guild!.id] = null
-            return this.player.stop();
-        } else {
-
-            this.prepareSong(this.queue[0].url).catch(error => console.error(error));
-            this.currentlyPlaying = this.queue[0];
-            this.currentPlayingMessage = await this.playing(message, this.queue[0]) || null;
-            this.queue.shift();
-            if (exitTimeOut != null) {
-                console.log("Clearing timeout");
-                clearTimeout(exitTimeOut);
-            }
-            const callback = async () => {
-                if (this.player.state.status === AudioPlayerStatus.Idle) {
-                    if (this.currentPlayingMessage != null) {
+        this.prepareSong(this.queue[0].url).catch(error => console.error(error));
+        this.currentlyPlaying = this.queue[0];
+        this.currentPlayingMessage = await this.playing(message, this.queue[0]) || null;
+        this.queue.shift();
+        if (exitTimeOut != null) {
+            console.log("Clearing timeout");
+            clearTimeout(exitTimeOut);
+        }
+        const callback = async () => {
+            if (this.player.state.status === AudioPlayerStatus.Idle) {
+                if (this.currentPlayingMessage != null) {
+                    try {
+                        await this.currentPlayingMessage.delete();
+                    } catch (error) {
+                        console.error(error);
+                    }
+                };
+                if (this.queue[0]) {
+                    this.currentlyPlaying = this.queue[0];
+                    if (this.messageQueue[0]) {
                         try {
-                            await this.currentPlayingMessage.delete();
+                            await this.messageQueue[0].delete();
+                            this.messageQueue.shift();
                         } catch (error) {
                             console.error(error);
                         }
-                    };
-                    if (this.queue[0]) {
-                        this.currentlyPlaying = this.queue[0];
-                        if (this.messageQueue[0]) {
-                            try {
-                                await this.messageQueue[0].delete();
-                                this.messageQueue.shift();
-                            } catch (error) {
-                                console.error(error);
-                            }
-                        }
-                        this.currentPlayingMessage = await this.playing(message, this.queue[0]) || null;
-                        this.playSong(message, servers);
-                        this.player.removeListener('stateChange', callback);
-                    } else {
-                        exitTimeOut = setTimeout(() => {
-                            message.channel.send('93adt 3min blech musica, hani 5arej').catch(error => { console.error(`ya ltif ${error}`) });
-                            this.player.removeListener('stateChange', callback);
-                            try {
-                                this.player.stop();
-                                this.connection!.destroy()
-                                servers[message.guild!.id] = null;
-
-                            } catch (error) {
-                                console.error(error);
-                            }
-                        }, 1000 * (60 * 3))
                     }
+                    this.currentPlayingMessage = await this.playing(message, this.queue[0]) || null;
+                    this.playSong(message, servers);
+                    this.player.removeListener('stateChange', callback);
+                } else {
+                    exitTimeOut = setTimeout(() => {
+                        message.channel.send('93adt 3min blech musica, hani 5arej').catch(error => { console.error(`ya ltif ${error}`) });
+                        this.player.removeListener('stateChange', callback);
+                        try {
+                            this.player.stop();
+                            this.connection!.destroy()
+                            servers[message.guild!.id] = null;
+
+                        } catch (error) {
+                            console.error(error);
+                        }
+                    }, 1000 * (60 * 3))
                 }
             }
-            return this.player.on('stateChange', callback);
         }
+        return this.player.on('stateChange', callback);
     }
     async play(message: Message, song: Video, servers: any): Promise<Number | Promise<AudioPlayer>> {
         console.log(message.guild!.name);
