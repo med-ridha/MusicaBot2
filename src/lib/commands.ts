@@ -3,6 +3,14 @@ import { play, stop, skip, resume, pause } from "./music";
 import { scan, supportedLanguages } from "./ocr";
 import { qrcode } from "./qrcode";
 import { chooseSong, sendSong } from "./song";
+import { getAccessToken, getTrackInfo } from "./spotify";
+let token: string;
+getAccessToken().then((token) => {
+    token = token;
+});
+setTimeout(async () => {
+    token = await getAccessToken();
+}, 3500)
 let waitingForResponse = false;
 let messageCache: Message;
 export async function handleCommands(message: Message, content: string, channel: VoiceBasedChannel) {
@@ -12,6 +20,22 @@ export async function handleCommands(message: Message, content: string, channel:
     content = args.join(" ");
 
     switch (command) {
+        case "track":
+            if (!args[0]) {
+                message.reply("no track id detected");
+                return;
+            }
+            if (!token) {
+                message.reply("please wait a few seconds before trying again");
+                return;
+            }
+            try {
+                const trackName = await getTrackInfo(args[0], token);
+                message.reply(trackName);
+            } catch (error) {
+                console.error(error);
+            }
+            break;
         case "7ot":
             if (!channel) {
                 message.reply('od5el lel voice w 3awed jareb');
