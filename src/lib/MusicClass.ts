@@ -13,7 +13,7 @@ import { PaginatedResponse, Video } from "popyt";
 import { createDiscordJSAdapter } from '../adapter';
 import fs from 'fs'
 
-import ytdl from "ytdl-core";
+import ytdl from "@distube/ytdl-core";
 let exitTimeOut: NodeJS.Timeout | null = null;
 
 export class MusicClass {
@@ -57,7 +57,7 @@ export class MusicClass {
         })
     }
 
-    async prepareSong(songURL: string): Promise<AudioPlayer> {
+    async prepareSong(songURL: string): Promise<void | AudioPlayer> {
         try {
             ytdl(
                 songURL,
@@ -65,6 +65,7 @@ export class MusicClass {
                     filter: "audioonly",
                     quality: "highestaudio"
                 }
+                //@ts-ignore
             ).pipe(fs.createWriteStream('/tmp/song.mp3')).on('finish', () => {
                 const r = fs.createReadStream('/tmp/song.mp3')
                 const resource = createAudioResource(
@@ -131,9 +132,9 @@ export class MusicClass {
                     }
                     this.currentPlayingMessage = await this.playing(message, this.queue[0]) || null;
                     this.playSong(message, servers);
-                    this.player.removeListener('stateChange', callback);
+                    this.player.on('stateChange', () => null);
                 } else {
-                    this.player.removeListener('stateChange', callback);
+                    this.player.on('stateChange', () => null);
                     try {
                         this.player.stop();
                         this.connection!.destroy()
@@ -170,11 +171,12 @@ export class MusicClass {
         }
         if (this.player.state.status === AudioPlayerStatus.Playing) {
             this.queue.push(song);
-            let temp = await this.Queued(message, song);
+            let temp: void | Message<boolean> = await this.Queued(message, song);
             if (temp == null) {
                 console.error("something went wrong");
             } else {
-                this.messageQueue.push(temp);
+                if (typeof temp !== 'undefined')
+                    this.messageQueue.push(temp);
             }
             return 0;
         } else {

@@ -30,13 +30,15 @@ export async function sendSong(message: Message, index?: number, content?: strin
     let songURL = content ? content : searchResults[index!].url;
     let mes = await message.channel.send("Working on it...");
     try {
+        
         ytdl(
             songURL,
             {
                 filter: "audioonly",
                 quality: "highestaudio"
             }
-        ).pipe(fs.createWriteStream(`/tmp/download.mp3`)).on('finish', async () => {
+        //@ts-ignore
+        ).pipe(fs.createWriteStream('/tmp/download.mp3')).on('finish', async () => {
             mes.delete();
             mes = await message.channel.send('Almost there...');
             try {
