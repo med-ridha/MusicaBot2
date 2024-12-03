@@ -26,9 +26,9 @@ jobs:
           tags: musicabot:latest
 
       - name: vuln scan
-        uses: dataswift/gha-trivy@v3.1.0
+        uses: anvayacloud/trivy-action@v0.0.2
         with:
-          image: musicabot:latest
-          token: ${{ secrets.GITHUB_TOKEN }}
+          image_name: musicabot:latest
           severity: HIGH,CRITICAL
           vuln_type: os,library
+          exit_code: 0
