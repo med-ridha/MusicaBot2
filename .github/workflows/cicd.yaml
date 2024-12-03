@@ -26,7 +26,7 @@ jobs:
           tags: musicabot:latest
 
       - name: vuln scan
-        uses: dataswift/gha-trivy@v3.0.0
+        uses: dataswift/gha-trivy@v3.1.0
         with:
           image: musicabot:latest
           token: ${{ secrets.GITHUB_TOKEN }}
