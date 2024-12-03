@@ -26,7 +26,7 @@ jobs:
           tags: musicabot:latest
 
       - name: vuln scan
-        uses: aquasecurity/trivy-action@v0.28.0
+        uses: aquasecurity/trivy-action@0.28.0
         with:
           image_ref: musicabot:latest
           format: table
