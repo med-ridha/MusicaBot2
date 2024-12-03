@@ -28,7 +28,7 @@ jobs:
       - name: vuln scan
         uses: aquasecurity/trivy-action@0.28.0
         with:
-          image_ref: musicabot:latest
+          image_ref: docker.io/library/musicabot:latest
           format: table
           ignore_unfixed: true
           severity: 'HIGH,CRITICAL'
