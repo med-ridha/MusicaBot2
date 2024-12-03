@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: '16'
 
-      - name: dockerize
+      - name: build
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -26,9 +26,11 @@ jobs:
           tags: musicabot:latest
 
       - name: vuln scan
-        uses: anvayacloud/trivy-action@v0.0.2
+        uses: aquasecurity/trivy-action@v0.28.0
         with:
-          image_name: musicabot:latest
-          severity: HIGH,CRITICAL
-          vuln_type: os,library
-          exit_code: 0
+          image_ref: musicabot:latest
+          format: table
+          ignore_unfixed: true
+          severity: 'HIGH,CRITICAL'
+          vuln-type: 'os,library'
+          exit_code: '0'
