@@ -30,3 +30,5 @@ jobs:
         with:
           image: musicabot:latest
           token: ${{ secrets.GITHUB_TOKEN }}
+          severity: HIGH,CRITICAL
+          vuln_type: os,library
