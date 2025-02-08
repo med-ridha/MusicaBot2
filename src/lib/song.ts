@@ -1,4 +1,4 @@
-import ytdl from "ytdl-core";
+import ytdl from "@distube/ytdl-core";
 import fs from 'fs'
 import { Message } from "discord.js";
 import { YouTube, Video } from 'popyt';
@@ -10,14 +10,14 @@ export async function chooseSong(songName: string, message: Message): Promise<Me
 
     await search.searchVideos(songName,).then(async (results) => {
         if (results.items.length === 0) {
-            message.channel.send("No results found")
+            message.reply("No results found")
             return;
         } else {
             let response = "Choose a song by typing the number\n"
             for (let i = 0; i < 10; i++) {
                 response += `${i + 1}. ${results.items[i].title}\n`
             }
-            messageCache = await message.channel.send(response);
+            messageCache = await message.reply(response);
             searchResults = results.items.slice(0, 10);
         }
     }).catch((error) => {
@@ -28,26 +28,25 @@ export async function chooseSong(songName: string, message: Message): Promise<Me
 
 export async function sendSong(message: Message, index?: number, content?: string): Promise<void> {
     let songURL = content ? content : searchResults[index!].url;
-    let mes = await message.channel.send("Working on it...");
+    message.reply(`Downloading the song... ${songURL}`);
     try {
-        
+        let mes = await message.reply("Working on it...");
         ytdl(
             songURL,
             {
                 filter: "audioonly",
                 quality: "highestaudio"
             }
-        //@ts-ignore
-        ).pipe(fs.createWriteStream('/tmp/download.mp3')).on('finish', async () => {
+        ).pipe(fs.createWriteStream('/tmp/test.mp3')).on('finish', async () => {
             mes.delete();
-            mes = await message.channel.send('Almost there...');
+            mes = await message.reply('Almost there...');
             try {
-                await message.channel.send({
+                await message.reply({
                     files: [`/tmp/download.mp3`]
                 });
 
             } catch (error) {
-                message.channel.send("Something went wrong! oops...");
+                message.reply("Something went wrong! oops...");
             }
             mes.delete();
             return;

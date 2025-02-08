@@ -108,7 +108,7 @@ export async function handleCommands(message: Message, content: string, channel:
                 return;
             }
             await qrcode(content);
-            message.channel.send({
+            message.reply({
                 files: ["./qrcode.png"]
             })
             break;

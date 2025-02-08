@@ -14,6 +14,7 @@ import { createDiscordJSAdapter } from '../adapter';
 import fs from 'fs'
 
 import ytdl from "@distube/ytdl-core";
+import { exec } from "child_process";
 let exitTimeOut: NodeJS.Timeout | null = null;
 
 export class MusicClass {
@@ -59,14 +60,26 @@ export class MusicClass {
 
     async prepareSong(songURL: string): Promise<void | AudioPlayer> {
         try {
-            ytdl(
-                songURL,
-                {
-                    filter: "audioonly",
-                    quality: "highestaudio"
+            // ytdl(
+            //     songURL,
+            //     {
+            //         filter: "audioonly",
+            //         quality: "highestaudio"
+            //     }
+            //     //@ts-ignore
+            // ).pipe(fs.createWriteStream('/tmp/song.mp3')).on('finish', () => {
+            //     const r = fs.createReadStream('/tmp/song.mp3')
+            //     const resource = createAudioResource(
+            //         r, {
+            //         inputType: StreamType.Arbitrary,
+            //     });
+            //     this.player.play(resource);
+            // });
+            exec(`torsocks yt-dlp -f ba -o song.mp3 -P /tmp --force-overwrites ${songURL}`, (error, stdout, stderr) => {
+                if (error) {
+                    console.error(`error: ${error.message}`);
+                    return;
                 }
-                //@ts-ignore
-            ).pipe(fs.createWriteStream('/tmp/song.mp3')).on('finish', () => {
                 const r = fs.createReadStream('/tmp/song.mp3')
                 const resource = createAudioResource(
                     r, {
@@ -84,11 +97,11 @@ export class MusicClass {
         return state!;
     }
     async Queued(message: Message, song: Video): Promise<void | Message<boolean>> {
-        return message.channel.send(`Queued: ${song.title}`)
+        return message.reply(`Queued: ${song.title}`)
             .catch((error) => { console.error(`ya ltif ${error}`) });
     }
     async playing(message: Message, song: Video): Promise<void | Message<boolean>> {
-        return message.channel.send(`Playing: ${song.title}`)
+        return message.reply(`Playing: ${song.title}`)
             .catch(error => { console.error(`ya ltif ${error}`) });
     }
     printQueue() {
