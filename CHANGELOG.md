@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/med-ridha/MusicaBot2/compare/br-v1.0.0...br-v1.1.0) (2025-02-12)
+
+
+### Features
+
+* new feature!! ([3d15757](https://github.com/med-ridha/MusicaBot2/commit/3d157579eb005d7ebcba7117d531f957adea0f10))
+
 # 1.0.0 (2025-02-12)
 
 
