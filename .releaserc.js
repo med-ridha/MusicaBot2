@@ -27,7 +27,7 @@ module.exports = {
     [
       "@semantic-release/git",
       {
-        message: `Release(${country}):` + " ${nextRelease.version}" + ` - ${new Date().toLocaleDateString("en-GB")}\n\n${nextRelease.notes}`
+        message: `Release(${country}):` + " ${nextRelease.version}" + ` - ${new Date().toLocaleDateString("en-GB")}\n\n` + "${nextRelease.notes}"
       }
     ],
     [
