@@ -1,0 +1,40 @@
+name: Semantic Release
+
+on:
+  workflow_call:
+    inputs:
+      country:
+        type: string
+        required: true
+    secrets:
+      token:
+        required: true
+
+jobs:
+  release:
+    name: semantic release
+    runs-on: ubuntu-latest
+    env:
+      COUNTRY: ${{ inputs.country }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.token }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.17.0
+
+      - name: Install dependencies
+        run: npm i -g @semantic-release/changelog @semantic-release/commit-analyzer @semantic-release/git semantic-release conventional-changelog-conventionalcommits @saithodev/semantic-release-backmerge
+
+      - name: print country
+        run: echo $COUNTRY
+
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.token }}
+          COUNTRY: ${{ env.COUNTRY }}
+        run: npx semantic-release

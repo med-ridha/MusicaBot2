@@ -1,0 +1,19 @@
+name: Manual Release
+on:
+  workflow_dispatch:
+    inputs:
+      countries:
+        description: "Countries to release example: '[\"tn\", \"ma\", \"dz\"]'"
+        type: string
+        default: '["br", "de", "fr"]'
+        required: true
+
+jobs:
+  # enable job on stable branch only.
+  release:
+    uses: ./.github/workflows/multi_semantic_release.yml
+    with:
+      countries: ${{ inputs.countries }}
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
+

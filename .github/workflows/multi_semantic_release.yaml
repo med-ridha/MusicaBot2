@@ -1,0 +1,44 @@
+name: Multi Semantic Release
+
+on:
+  workflow_call:
+    inputs:
+      countries:
+        description: "A JSON array of country codes to run semantic-release for example '[\"tn\", \"dz\"]'"
+        required: true
+        type: string
+    secrets:
+      token:
+        required: true
+
+jobs:
+  release:
+    name: Release for ${{ matrix.country }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        country: ${{ fromJson(inputs.countries) }}
+      max-parallel: 1
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.token }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.17.0
+
+      - name: Install dependencies
+        run: npm i -g @semantic-release/changelog @semantic-release/commit-analyzer @semantic-release/git semantic-release conventional-changelog-conventionalcommits @saithodev/semantic-release-backmerge
+
+      - name: print
+        run: echo ${{ matrix.country }}
+
+      - name: Run semantic-release for ${{ matrix.country }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.token }}
+          # Pass the dynamic country code to your release config
+          COUNTRY: ${{ matrix.country }}
+        run: npx semantic-release
