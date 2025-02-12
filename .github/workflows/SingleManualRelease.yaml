@@ -14,5 +14,5 @@ jobs:
     with:
       country: ${{ inputs.country }}
     secrets:
-      token: ${{ secrets.GITHUB_TOKEN }}
+      token: ${{ secrets.PAT_TOKEN }}
 
