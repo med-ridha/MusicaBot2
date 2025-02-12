@@ -10,7 +10,7 @@ on:
 jobs:
 
   release:
-    uses: ./.github/workflows/semantic_release.yml
+    uses: ./.github/workflows/semantic_release.yaml
     with:
       country: ${{ inputs.country }}
     secrets:

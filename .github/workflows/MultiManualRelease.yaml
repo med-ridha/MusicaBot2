@@ -11,7 +11,7 @@ on:
 jobs:
   # enable job on stable branch only.
   release:
-    uses: ./.github/workflows/multi_semantic_release.yml
+    uses: ./.github/workflows/multi_semantic_release.yaml
     with:
       countries: ${{ inputs.countries }}
     secrets:
