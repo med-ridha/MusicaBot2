@@ -25,6 +25,9 @@ jobs:
         with:
           token: ${{ secrets.token }}
 
+      - name: force checkout
+        run: git fetch --all && git reset --hard origin/master
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
