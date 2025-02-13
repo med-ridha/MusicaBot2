@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/med-ridha/MusicaBot2/compare/de-v1.0.0...de-v1.1.0) (2025-02-13)
+
+
+### Features
+
+* the ultimate test ([8aee361](https://github.com/med-ridha/MusicaBot2/commit/8aee361f60ee32445f695e2f2e5c57249358acff))
+
 # [1.3.0](https://github.com/med-ridha/MusicaBot2/compare/br-v1.2.0...br-v1.3.0) (2025-02-13)
 
 
