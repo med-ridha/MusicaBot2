@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/med-ridha/MusicaBot2/compare/fr-v1.1.0...fr-v1.2.0) (2025-02-21)
+
+
+### Features
+
+* add cicd ([5714b35](https://github.com/med-ridha/MusicaBot2/commit/5714b356b593ba88985cf6386fcac3d1cbd24c81))
+
 # [1.2.0](https://github.com/med-ridha/MusicaBot2/compare/de-v1.1.0...de-v1.2.0) (2025-02-21)
 
 
