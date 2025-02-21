@@ -16,7 +16,6 @@ module.exports = {
         successComment: false,
         failComment: false,
         assets: [],
-        releaseNameTemplate: `Release(${country.toUpperCase()}):` + ` - ${new Date().toLocaleDateString("en-GB")}\n\n`,
       }
     ],
     [
