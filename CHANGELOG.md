@@ -3,6 +3,14 @@
 
 ### Bug Fixes
 
+* New fix! ([b54206b](https://github.com/med-ridha/MusicaBot2/commit/b54206b96632454a3b979ab64c6ba4a6e6b37bc7))
+* New fix!! ([312f457](https://github.com/med-ridha/MusicaBot2/commit/312f457e84adc6e2091ae369a426460d8876ae3e))
+
+## [1.7.1](https://github.com/med-ridha/MusicaBot2/compare/br-v1.7.0...br-v1.7.1) (2025-03-25)
+
+
+### Bug Fixes
+
 * New fix!! ([312f457](https://github.com/med-ridha/MusicaBot2/commit/312f457e84adc6e2091ae369a426460d8876ae3e))
 
 # [1.7.0](https://github.com/med-ridha/MusicaBot2/compare/br-v1.6.0...br-v1.7.0) (2025-02-21)
