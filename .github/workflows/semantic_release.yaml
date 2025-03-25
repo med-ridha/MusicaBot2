@@ -33,6 +33,9 @@ jobs:
       - name: print country
         run: echo $COUNTRY
 
+      - name: force checkout
+        run: git fetch --prune --unshallow
+
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.token }}
