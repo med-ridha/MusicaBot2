@@ -33,7 +33,7 @@ module.exports = {
         [
             "@saithodev/semantic-release-backmerge",
             {
-                backmergeStrategy: merge,
+                backmergeStrategy: "merge",
             }
         ],
     ],
