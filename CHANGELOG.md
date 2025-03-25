@@ -1,3 +1,10 @@
+## [1.7.2](https://github.com/med-ridha/MusicaBot2/compare/br-v1.7.1...br-v1.7.2) (2025-03-25)
+
+
+### Bug Fixes
+
+* force checkout ([6dafb7b](https://github.com/med-ridha/MusicaBot2/commit/6dafb7b2d14fab12e87ec33fc70e0b5e901ed724))
+
 ## [1.7.1](https://github.com/med-ridha/MusicaBot2/compare/br-v1.7.0...br-v1.7.1) (2025-03-25)
 
 
